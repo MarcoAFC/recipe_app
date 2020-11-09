@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mvc_recipe/src/Controllers/main_ingredient_search_screen/main_ingredient_controller.dart';
-import 'package:mvc_recipe/src/Models/networking/providers/interface_recipe_provider.dart';
+import 'package:mvc_recipe/src/Models/networking/providers/meals/interface_recipe_provider.dart';
 import 'package:mvc_recipe/src/Models/recipe_list/recipe_list.dart';
 import 'package:mvc_recipe/src/View/main_screen/widgets/recipe_card.dart';
 import 'package:mvc_recipe/src/View/main_screen/widgets/search_bar.dart';

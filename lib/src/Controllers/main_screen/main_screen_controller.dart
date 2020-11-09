@@ -1,4 +1,4 @@
-import 'package:mvc_recipe/src/Models/networking/providers/interface_recipe_provider.dart';
+import 'package:mvc_recipe/src/Models/networking/providers/meals/interface_recipe_provider.dart';
 import 'package:mvc_recipe/src/Models/recipe/recipe_model.dart';
 import 'package:mvc_recipe/src/Models/recipe_list/recipe_list.dart';
 import 'package:rxdart/rxdart.dart';

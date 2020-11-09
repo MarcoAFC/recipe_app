@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvc_recipe/src/Models/networking/providers/recipe_provider.dart';
+import 'package:mvc_recipe/src/Models/networking/providers/meals/recipe_provider.dart';
 
 import 'widgets/body.dart';
 

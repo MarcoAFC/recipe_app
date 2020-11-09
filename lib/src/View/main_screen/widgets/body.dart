@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mvc_recipe/src/Controllers/main_screen/main_screen_controller.dart';
-import 'package:mvc_recipe/src/Models/networking/providers/interface_recipe_provider.dart';
+import 'package:mvc_recipe/src/Models/networking/providers/meals/interface_recipe_provider.dart';
 import 'package:mvc_recipe/src/Models/recipe/recipe_model.dart';
 import 'package:mvc_recipe/src/Models/recipe_list/recipe_list.dart';
 import 'package:mvc_recipe/src/View/main_screen/widgets/button_from_svg.dart';
@@ -58,7 +58,9 @@ class _BodyState extends State<Body> {
                       label: StringUtil.INGREDIENTS_LABEL,
                     ),
                     ButtonFromSvg(
-                      onTap: (){}, 
+                      onTap: (){
+                        Navigator.of(context).pushNamed("/region");
+                      }, 
                       svgPath: "icons/world.svg", 
                       iconSize: 60, 
                       splashSize: 80,

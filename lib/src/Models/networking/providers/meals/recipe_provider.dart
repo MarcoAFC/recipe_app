@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mvc_recipe/src/Models/networking/providers/interface_recipe_provider.dart';
+import 'package:mvc_recipe/src/Models/networking/providers/meals/interface_recipe_provider.dart';
 import 'package:mvc_recipe/src/Models/recipe_list/recipe_list.dart';
 import 'package:mvc_recipe/src/Models/recipe/recipe_model.dart';
 
@@ -31,15 +31,8 @@ class RecipeProvider implements IRecipeProvider{
     if(response.data['meals'] != null){
      recipes = RecipeList.fromJson(response.data);
     }
-    var completeRecipes = List<RecipeModel>();
-    if(recipes != null){
-      for(var id in recipes?.recipes){
-        var recipe = await getRecipeByID(id.idMeal);
-        completeRecipes.add(recipe);
-        print(recipe.meal);
-      }
-    }
-    return RecipeList(completeRecipes);
+    
+    return RecipeList(await getFullRecipes(recipes));
   }
 
   @override
@@ -48,7 +41,12 @@ class RecipeProvider implements IRecipeProvider{
     if(response.statusCode != 200){
       throw Exception("Request error: ${response.statusCode} - ${response.statusMessage}");
     }
-    return RecipeList.fromJson(response.data);
+    var recipes;
+    if(response.data['meals'] != null){
+     recipes = RecipeList.fromJson(response.data);
+    }
+    
+    return RecipeList(await getFullRecipes(recipes));
   }
 
   @override
@@ -78,4 +76,14 @@ class RecipeProvider implements IRecipeProvider{
     return RecipeModel.fromJson(response.data['meals'][0]);
   }
   
+  Future<List<RecipeModel>> getFullRecipes(RecipeList recipes) async{
+    var completeRecipes = List<RecipeModel>();
+    if(recipes != null){
+      for(var id in recipes?.recipes){
+        var recipe = await getRecipeByID(id.idMeal);
+        completeRecipes.add(recipe);
+      }
+    }
+    return completeRecipes;
+  }
 }
