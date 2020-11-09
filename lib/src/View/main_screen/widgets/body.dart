@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mvc_recipe/src/Controllers/main_screen/main_screen_controller.dart';
 import 'package:mvc_recipe/src/Models/networking/providers/interface_recipe_provider.dart';
+import 'package:mvc_recipe/src/Models/recipe/recipe_model.dart';
 import 'package:mvc_recipe/src/Models/recipe_list/recipe_list.dart';
 import 'package:mvc_recipe/src/View/main_screen/widgets/button_from_svg.dart';
 import 'package:mvc_recipe/src/View/main_screen/widgets/recipe_card.dart';
 import 'package:mvc_recipe/src/View/main_screen/widgets/search_bar.dart';
+import 'package:mvc_recipe/src/View/recipe_screen/recipe_screen.dart';
 import 'package:mvc_recipe/src/utils/string_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -46,7 +48,9 @@ class _BodyState extends State<Body> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ButtonFromSvg(
-                      onTap: (){}, 
+                      onTap: (){
+                        Navigator.of(context).pushNamed("/mainIngredient");
+                      }, 
                       svgPath: "icons/ingredients_outline2.svg", 
                       iconSize: 60, 
                       splashSize: 80,
@@ -62,7 +66,30 @@ class _BodyState extends State<Body> {
                       label: StringUtil.WORLD_LABEL,
                     ),
                     ButtonFromSvg(
-                      onTap: (){}, 
+                      onTap: () async {
+                        final recipe = Future.delayed(Duration(milliseconds: 1000), () => controller.getRandomMeal());
+                        showDialog(
+                          context: context, 
+                          builder: (context) => 
+                          FutureBuilder<RecipeModel>(
+                            future: recipe,
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
+                                return RecipeScreen(
+                                  key: ValueKey("RandomRecipe"), 
+                                  recipe: snapshot.data
+                                );
+                              }else{
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    key: ValueKey("LoadingIndicator"),
+                                  ),
+                                );
+                              }
+                            }
+                          ),
+                        );
+                      }, 
                       svgPath: "icons/shuffle.svg", 
                       iconSize: 60, 
                       splashSize: 80,
@@ -80,6 +107,7 @@ class _BodyState extends State<Body> {
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 12.0),
                           child: RecipeCard(
+                            key: ValueKey(index),
                             recipe: snapshot.data.recipes[index],
                           ),
                         )
@@ -100,6 +128,7 @@ class _BodyState extends State<Body> {
                             color: Theme.of(context).accentColor.withAlpha(100)
                           ),
                           child: Shimmer.fromColors(
+                            key: ValueKey("ShimmerLoading"),
                             highlightColor: Theme.of(context).accentColor.withAlpha(100),
                             baseColor: Colors.grey[400],
                             child: ListTile(

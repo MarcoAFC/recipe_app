@@ -20,4 +20,8 @@ class MainController{
   dispose(){
     randomMealStream.close();
   }
+
+  Future<RecipeModel> getRandomMeal(){
+    return _provider.getRandomMeal();
+  }
 }

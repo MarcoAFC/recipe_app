@@ -23,16 +23,28 @@ class RecipeProvider implements IRecipeProvider{
 
   @override
   Future<RecipeList> getMealsByMainIngredient(String ingredient) async {
-    var response = await dio.get("/filter.php?i=chicken_breast");
+    var response = await dio.get("/filter.php?i=$ingredient");
     if(response.statusCode != 200){
       throw Exception("Request error: ${response.statusCode} - ${response.statusMessage}");
     }
-    return RecipeList.fromJson(response.data);
+    var recipes;
+    if(response.data['meals'] != null){
+     recipes = RecipeList.fromJson(response.data);
+    }
+    var completeRecipes = List<RecipeModel>();
+    if(recipes != null){
+      for(var id in recipes?.recipes){
+        var recipe = await getRecipeByID(id.idMeal);
+        completeRecipes.add(recipe);
+        print(recipe.meal);
+      }
+    }
+    return RecipeList(completeRecipes);
   }
 
   @override
   Future<RecipeList> getMealsByRegion(String region) async {
-    var response = await dio.get("/filter.php?a=Canadian");
+    var response = await dio.get("/filter.php?a=$region");
     if(response.statusCode != 200){
       throw Exception("Request error: ${response.statusCode} - ${response.statusMessage}");
     }
@@ -59,7 +71,7 @@ class RecipeProvider implements IRecipeProvider{
 
   @override
   Future<RecipeModel> getRecipeByID(String id) async {
-    var response = await dio.get("/lookup.php?i=52772");
+    var response = await dio.get("/lookup.php?i=$id");
     if(response.statusCode != 200){
       throw Exception("Request error: ${response.statusCode} - ${response.statusMessage}");
     }

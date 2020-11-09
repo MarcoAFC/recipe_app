@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
-
-
+  final bool focus;
+  final void Function(String) onSubmitted;
+  const SearchBar({
+    Key key,
+    this.focus = false,
+    this.onSubmitted,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,6 +26,7 @@ class SearchBar extends StatelessWidget {
           height: MediaQuery.of(context).size.height*0.058,
           width: MediaQuery.of(context).size.width*0.8,
           child: TextField(
+            autofocus: focus,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.01),
               hintText: "Search",
@@ -28,6 +34,7 @@ class SearchBar extends StatelessWidget {
               prefixIcon: Icon(Icons.search, size: 20.0, color: Colors.black87,),
               focusedBorder: InputBorder.none
             ),
+            onSubmitted: onSubmitted,
           )
         ),
       ),

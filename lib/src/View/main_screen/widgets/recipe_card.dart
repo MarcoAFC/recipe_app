@@ -12,8 +12,11 @@ class RecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Overlay.of(context).insert(
-          OverlayEntry(builder: (_) => RecipeScreen())
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (context, _, __) => RecipeScreen(key:ValueKey("TappedRecipe"), recipe: recipe),
+          barrierDismissible: true,
+          barrierLabel: "ModalBarrier",
         );
       },
       child: Container(
@@ -58,7 +61,7 @@ class RecipeCard extends StatelessWidget {
 
   SvgPicture chooseIcon(double height, double width){
     final tags = recipe?.tags?.split(",")?? [];
-    if(tags.contains("Cake") || tags.contains("Bun") || tags.contains("Pie")){
+    if(tags.contains("Cake") || tags.contains("Bun") || tags.contains("Pie") ||tags.contains("Baking")){
       return SvgPicture.asset("icons/baked.svg", height: height, width: width,);
     }
     else if(tags.contains("Fish") || tags.contains("Seafood")){
@@ -80,7 +83,6 @@ class RecipeCard extends StatelessWidget {
       return SvgPicture.asset("icons/noodles.svg", height: height, width: width);
     }
     else{
-      print(tags);
       return SvgPicture.asset("icons/casserole.svg", height: height, width: width);
     }
   }
